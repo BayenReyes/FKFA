@@ -26,7 +26,7 @@ SECRET_KEY = 'ev2!z-c%5wnc(ay3i@v5y3%da*#y1yykac*7+@k5uzd65hp@po'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
