@@ -1,0 +1,51 @@
+{% extends "FKFA/Form.html" %}
+{% load mytags %}
+
+{% load staticfiles %}
+{% block navRepo%}class= 'active'{% endblock %}
+{% block body_block%}
+
+
+{% DateList as rep %}
+
+<div id="Report" class="colrep">
+    {% for a,b in rep.items|dictsortreversed:0%}
+    <div class="card">
+        <a class="card-link" data-toggle="collapse" href="#collapse{{a}}" data-parent="Report" aria-expanded="{% if forloop.first %}true{%else%}false{% endif %}">
+            <div class="card-header">
+                <h4 class="mb-0">{{a}} <i class="faicon fas fa-chevron-{% if forloop.first %}up{%else%}down{% endif %}" style="float:right;"></i></h4>
+            </div>
+        </a>
+        <div id="collapse{{a}}" class="collapse {% if forloop.first %}show{% endif %}" data-parent="#Report">
+            <div class="card-body">
+                <div class="row">
+                    {% for c in b %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 ">
+                            <a class="btn btn-{% if c.1 %}danger{% else %}info{% endif %} form-group"
+                               style="width: 100%;" href="{% url 'tabledetail' %}?date={{c.0}}">
+                                <h5>{{c.0|dateparse}} </h5><br>
+                            </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+<script>
+    function toggleIcon(e) {
+    $(e.target)
+        .prev('.card-link')
+        .find(".faicon")
+        .toggleClass('fa-chevron-down fa-chevron-up');
+    }
+
+    $('.colrep').on('hide.bs.collapse', toggleIcon);
+    $('.colrep').on('shown.bs.collapse', toggleIcon);
+</script>
+{% endblock %}
+

@@ -1,0 +1,44 @@
+{% extends "FKFA/Form.html" %}
+{% load mytags %}
+
+{% block body_block%}
+
+{% load mytags %}
+gfjhkjhbkj
+<form action="/addcontact" method="post"  id="qwe">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="txtname">Name</label>
+        <input type="text" class="form-control" name="txtname" id="txtname"
+               aria-describedby="emailHelp" placeholder="Name">
+    </div>
+    <div class="form-group">
+        <label for="txtemail">Email</label>
+        <input type="email" name="txtemail" class="form-control" id="txtemail"
+               placeholder="Email" required>
+    </div>
+    <button type="submit">Sign up</button>
+</form>
+
+<!--
+<script>
+
+
+    $("#qwe").submit(function(e) {
+      $.ajax({
+        url: "{% url 'addcontact'%}" ,
+        data: $('form').serialize(),
+        method: "POST",
+        success: function (data) {
+            alert("umayos ka naman");
+            alert("data"+data)
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.as);
+        }
+      });
+    });
+
+</script>
+-->
+{% endblock %}

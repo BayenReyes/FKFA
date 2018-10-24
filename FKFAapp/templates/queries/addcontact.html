@@ -1,0 +1,37 @@
+{% extends "queries/quebase.html" %}
+
+{% block body %}
+{% load staticfiles %}
+{% load mytags %}
+
+{{ name }}
+{{ email }}
+<script>
+    swal({
+      title: "Sending...",
+      text: "Please wait",
+      imageUrl: "{% static 'images/loading.gif' %}",
+      imageWidth: 90,
+      imageHeight: 90,
+      showConfirmButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false
+    });
+    consol.log("asdasdasds")
+
+</script>
+
+{% addcontact name email %}
+
+<script>
+    swal(
+      'Good job!',
+      'You clicked the button!',
+      'success'
+    ).then(function(){
+        window.location.href = "{% url 'advisory'%}";
+    });
+
+</script>
+
+{% endblock %}

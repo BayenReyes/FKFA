@@ -1,0 +1,37 @@
+{% extends "FKFA/Form.html" %}
+{% load mytags %}
+{% block navCage%}class= 'active'{% endblock %}
+{% block body_block%}
+
+<div class="container-fluid">
+
+<div id="cagescard" >
+{% files as files %}
+{% for n in files %}
+        <div class="card">
+            <a class="card-link" data-toggle="collapse" href="#collapse{{ forloop.counter }}">
+                <div class="card-header">
+                    <h4>{{n}}</h4>
+                </div>
+            </a>
+        <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.first %}show{% endif %} " data-parent="#cagescard">
+          <div class="card-body">
+              <div class="row">
+            {% for c in n|sheetname %}
+            <div style="margin: 0 0 0 15px;">
+                <div>
+          <a class="btn btn-info form-group"href="{% url 'listcage' %}?muni={{n}}&area={{c}}">
+          <h5 class="card-text">{{c}} </h5><br>
+          </a></div>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+        </div>
+      </div>
+{% endfor %}
+
+</div>
+
+</div>
+{% endblock %}

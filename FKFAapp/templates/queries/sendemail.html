@@ -1,0 +1,27 @@
+{% extends "queries/quebase.html" %}
+
+{% block body %}
+{% load staticfiles %}
+{% load mytags %}
+
+
+{{ recipients }}
+{{ message }}
+{{ file }}
+<script>
+        swal({
+          title: "Sending...",
+          text: "Please wait",
+          imageUrl: "{% static 'images/loading.gif' %}",
+          imageWidth: 90,
+          imageHeight: 90,
+          showConfirmButton: false,
+          allowEscapeKey: false,
+          allowOutsideClick: false
+        });
+</script>
+{% send_email message file %}
+
+
+
+{% endblock %}

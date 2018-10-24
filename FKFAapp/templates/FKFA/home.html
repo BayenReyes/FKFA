@@ -1,0 +1,249 @@
+{% extends "FKFA/Form.html" %}
+
+{% load mytags %}
+
+{% block navDash%}class= 'active'{% endblock %}
+
+{% block body_block%}
+<!----- linechart ng damage cost -->
+
+<div class="container-fluid" style="margin-bottom:15px;">
+    <div class="row">
+
+        <div class="card text-white bg-info col-lg-3 col-sm-6" style="background:#639bcc !important;">
+            <div class="card-header">
+                <h5 class="card-title">Last Fish Kill Recorded</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-white">Jan. 16, 2018</p>
+            </div>
+        </div>
+        <div class="card text-white bg-info col-lg-3 col-sm-6" style="background:#639bcc !important;">
+            <div class="card-header"><h5 class="card-title">Most Occurred Cause</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-white">Sulfur Upwelling</p>
+            </div>
+        </div>
+        <div class="card text-white bg-info col-lg-3 col-sm-6" style="background:#639bcc !important;">
+            <div class="card-header"><h5 class="card-title">Municipality with Highest Rate of Fish Kill</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-white">Talisay</p>
+            </div>
+        </div>
+        <div class="card text-white bg-info col-lg-3 col-sm-6" style="background:#639bcc !important;">
+            <div class="card-header"><h5 class="card-title">Total Damage Cost</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-white"> Php 291,189,930.00</p>
+
+            </div>
+        </div>
+        <div class="card text-white bg-info col-lg-3 col-sm-6" style="background:#639bcc !important;">
+            <div class="card-header"><h5 class="card-title">Highest Value Damage:</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-white">Php 6, 600, 000.00</p>
+            </div>
+        </div>
+        <div class="card text-white bg-info col-lg-3 col-sm-6" style="background:#639bcc !important;">
+            <div class="card-header"><h5 class="card-title">Total No. of Cages Affected: </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-white">1281 cages</p>
+            </div>
+        </div>
+        <div class="card text-white bg-info col-lg-3 col-sm-6" style="background:#639bcc !important;">
+            <div class="card-header"><h5 class="card-title">Total Cage</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text text-white">4,354 cages</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <canvas id="myChart2"></canvas>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-sm-12">
+
+<div class="container">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="chart-area"></canvas>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="col-lg-6 col-sm-12">
+
+<div class="container">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="linedamage"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script>
+{% dash as dash %}
+
+const ctx = document.getElementById('myChart2').getContext('2d');
+const data = {
+    // Labels should be Date objects
+    labels: [{% for i in dash.mind %} new Date({{i.0}}),{% endfor %}],
+    datasets: [{
+        fill: false,
+        label: 'MIN',
+        data: [{% for i in dash.mind %}{{i.1}},{% endfor %}],
+        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(54, 162, 235, .2)',
+        fill: '+2',
+    },{
+        fill: false,
+        label: 'MAX',
+        data: [{% for i in dash.maxd %}{{i.1}},{% endfor %}],
+        borderColor: 'rgba(255, 99, 132, 1)',
+        backgroundColor: 'rgba(255, 99, 132, .2)',
+        fill: '-1',
+    },]
+}
+const options = {
+    type: 'line',
+    data: data,
+    options: {
+        fill: false,
+        responsive: true,
+        scales: {
+            xAxes: [{
+                type: 'time',
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: "Date",
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: "Dissolved Oxygen",
+                }
+            }]
+        }
+    }
+}
+const chart = new Chart(ctx, options);
+
+
+
+
+
+</script>
+
+<script>
+    {% TopDamageCost as piec %}
+		var config = {
+			type: 'horizontalBar',
+			data: {
+				datasets: [{
+					data:  [{% for r in piec %} {{r|indexr:1}}, {% endfor %}],
+					backgroundColor: ['#1abb9c','#1abb9c','#1abb9c','#1abb9c','#1abb9c'],
+				}],
+				labels: [{% for r in piec %} '{{r|indexr:0}}', {% endfor %}
+				]
+			},
+			options: {
+				responsive: true,
+                legend: {
+                    display: false
+                },
+				title: {
+					display: true,
+					text: 'Damage Cost'
+				},
+				animation: {
+					animateScale: true,
+					animateRotate: true
+				},
+			}
+		};
+
+			var ctx2 = document.getElementById('chart-area').getContext('2d');
+			window.myDoughnut = new Chart(ctx2, config);
+
+    function getRandomColorHex() {
+    var hex = "0123456789ABCDEF",
+        color = "#";
+    for (var i = 1; i <= 6; i++) {
+      color += hex[Math.floor(Math.random() * 16)];
+    }
+    return color;
+    }
+
+</script>
+<script>
+{% LineDamageCost as dash %}
+
+const ctx3 = document.getElementById('linedamage').getContext('2d');
+const data3 = {
+    // Labels should be Date objects
+    labels: [{% for i in dash %} new Date({{i.0}}),{% endfor %}],
+    datasets: [{
+        fill: false,
+        label: 'Damage Cost',
+        data: [{% for i in dash %}{{i.1}},{% endfor %}],
+        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(54, 162, 235, .2)',
+    }]
+}
+const options3 = {
+    type: 'line',
+    data: data3,
+    options: {
+        fill: false,
+        responsive: true,
+        scales: {
+            xAxes: [{
+                type: 'time',
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: "Date",
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: "Dissolved Oxygen",
+                }
+            }]
+        }
+    }
+}
+const linedamage = new Chart(ctx3, options3);
+
+
+
+
+
+</script>
+{% endblock %}

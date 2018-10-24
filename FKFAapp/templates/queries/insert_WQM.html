@@ -1,0 +1,14 @@
+{% extends "queries/quebase.html" %}
+{% block body %}
+{% load staticfiles %}
+{% load mytags %}
+
+
+{{ areaname }}
+{{ paramname }}
+{{ areaid }}
+{{ parame }}
+{{ value }}
+{{ paramin }}
+{% toarray paramname value %}
+{% endblock %}

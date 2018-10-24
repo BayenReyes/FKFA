@@ -1,0 +1,60 @@
+{% extends "FKFA/Form.html" %}
+
+{% load mytags %}
+
+{% block body_block %}
+{% get_details date as det %}
+{% param_info as parinfo %}
+
+
+<div class="container"><h4 style="float:left;">Water Quality Updates in Taal Lake <br>(as of {{date|dateparse}})</h4>
+    <button class=" btn btn-primary" style="float:right;"><i class="fas fa-print"></i>Print</button>
+</div>
+<div>
+    <table class="table table-striped table-bordered" id="tbldet">
+        <thead>
+        <tr>
+            <th>Parameters</th>
+            {% for a in det.are %}
+            <th>{{a}}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for r in det.rec %}
+        <tr>
+            <td style="max-width:150px;"><b>{{r.0}}</b></td>
+            {% for c in r.1 %}
+            <td style="max-width:120px;min-width:100px;">
+                {% for d in c %}
+                {% acceptable r.0 d parinfo as stat%}
+                <p class="{% if stat or stat == 'error' or stat == None%}text-dark{%else%}text-danger{%endif%}"
+                   style="margin:0px;">{{d}}</p>
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+
+        </tbody>
+        <!-- -->
+    </table>
+</div>
+<script>
+function printData()
+{
+   var divToPrint=document.getElementById("tbldet");
+   newWin= window.open("");
+   newWin.document.write("<html>{% load staticfiles %}<head><style>body{font-family: 'Poppins', sans-serif;}table, td, th {border: 1px solid black;border-collapse: collapse;padding: .75rem;} th{font-size: 1rem;}</style></head><body>"+divToPrint.outerHTML+"</body></html>");
+   newWin.print();
+   newWin.close();
+}
+
+$('button').on('click',function(){
+printData();
+})
+
+
+
+</script>
+{% endblock %}

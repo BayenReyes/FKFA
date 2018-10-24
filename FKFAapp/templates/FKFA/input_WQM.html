@@ -1,0 +1,55 @@
+{% extends "FKFA/Form.html" %}
+{% load mytags %}
+
+{% block body_block%}
+
+
+{% get_headers as sub %}
+
+<div class="container">
+
+    <form action="{% url 'insertWQM' %}" method="post">
+        {% csrf_token %}
+        <ul class="nav nav-tabs">
+            {% for ar in area %}
+            <li class="nav-item"><a class="nav-link {% if forloop.first %}active{% endif %}" data-toggle="tab"
+                                    href="#A{{ forloop.counter }}">{{ar}}</a></li>
+            <input type="hidden" name="Area[]" value="{{ar}}"/>
+            {% endfor %}
+        </ul>
+
+        {% for su in param %}
+            <input type="hidden" name="Param[]" value="{{su}}"/>
+        {% endfor %}
+
+        <div class="tab-content" style="margin-top: 15px;">
+            {% for ar in area %}
+            <div id="A{{ forloop.counter }}" class="tab-pane {% if forloop.first %}active{% endif %}">
+                <input type="hidden" name="Are[]" value="A{{ forloop.counter }}"/>
+                {% for pa in param %}
+                <input type="hidden" name="A{{ forloop.parentloop.counter }}[]"
+                       value="A{{ forloop.parentloop.counter }}P{{ forloop.counter }}"/>
+                <div style="margin-bottom: 15px;">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">{{pa}}</span>
+                        </div>
+                        {% for su in pa|get_sub:sub %}
+                        <input type="text" class="form-control"
+                               name="A{{ forloop.parentloop.parentloop.counter }}P{{ forloop.parentloop.counter }}[]"
+                               placeholder="{% if su %} {{su}} {% endif %}" style="min-width:200px;">
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% endfor %}
+
+            </div>
+            {% endfor %}
+        </div>
+        <div class="container" style="text-align:right;">
+            <button class="btn btn-primary btn-lg" type="submit"><span class="fas fa-plus"></span>Insert</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
